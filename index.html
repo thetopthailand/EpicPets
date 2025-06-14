@@ -34,7 +34,7 @@
             position: relative;
         }
 
-        /* Animated Background */
+        /* Advanced Animated Background */
         .bg-animation {
             position: fixed;
             top: 0;
@@ -42,9 +42,15 @@
             width: 100%;
             height: 100%;
             z-index: -1;
-            background: linear-gradient(45deg, #0a0a0a, #1a1a2e, #16213e);
-            background-size: 400% 400%;
-            animation: gradientShift 15s ease infinite;
+            background: 
+                radial-gradient(circle at 20% 80%, rgba(0, 255, 136, 0.15) 0%, transparent 50%),
+                radial-gradient(circle at 80% 20%, rgba(0, 102, 255, 0.15) 0%, transparent 50%),
+                radial-gradient(circle at 40% 40%, rgba(255, 107, 53, 0.1) 0%, transparent 50%),
+                linear-gradient(135deg, #0a0a0a 0%, #1a1a2e 25%, #16213e 50%, #0f3460 75%, #0a0a0a 100%);
+            background-size: 400% 400%, 400% 400%, 400% 400%, 400% 400%;
+            animation: 
+                gradientShift 20s ease infinite,
+                colorPulse 8s ease-in-out infinite alternate;
         }
 
         .bg-animation::before {
@@ -54,22 +60,57 @@
             left: 0;
             width: 100%;
             height: 100%;
-            background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><defs><pattern id="grid" width="10" height="10" patternUnits="userSpaceOnUse"><path d="M 10 0 L 0 0 0 10" fill="none" stroke="rgba(0,255,136,0.1)" stroke-width="0.5"/></pattern></defs><rect width="100" height="100" fill="url(%23grid)"/></svg>');
-            opacity: 0.3;
-            animation: gridMove 20s linear infinite;
+            background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><defs><pattern id="grid" width="10" height="10" patternUnits="userSpaceOnUse"><path d="M 10 0 L 0 0 0 10" fill="none" stroke="rgba(0,255,136,0.15)" stroke-width="0.5"/></pattern></defs><rect width="100" height="100" fill="url(%23grid)"/></svg>');
+            opacity: 0.4;
+            animation: gridMove 25s linear infinite;
+        }
+
+        .bg-animation::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: 
+                radial-gradient(circle at 10% 20%, rgba(0, 255, 136, 0.05) 0%, transparent 30%),
+                radial-gradient(circle at 90% 80%, rgba(0, 102, 255, 0.05) 0%, transparent 30%);
+            animation: floatingOrbs 15s ease-in-out infinite;
         }
 
         @keyframes gradientShift {
-            0%, 100% { background-position: 0% 50%; }
-            50% { background-position: 100% 50%; }
+            0%, 100% { background-position: 0% 50%, 0% 50%, 0% 50%, 0% 50%; }
+            25% { background-position: 100% 50%, 25% 75%, 75% 25%, 25% 50%; }
+            50% { background-position: 100% 50%, 100% 50%, 100% 50%, 100% 50%; }
+            75% { background-position: 0% 50%, 75% 25%, 25% 75%, 75% 50%; }
+        }
+
+        @keyframes colorPulse {
+            0% { filter: brightness(1) saturate(1); }
+            100% { filter: brightness(1.1) saturate(1.2); }
         }
 
         @keyframes gridMove {
-            0% { transform: translate(0, 0); }
-            100% { transform: translate(10px, 10px); }
+            0% { transform: translate(0, 0) rotate(0deg); }
+            100% { transform: translate(15px, 15px) rotate(1deg); }
         }
 
-        /* Floating Particles */
+        @keyframes floatingOrbs {
+            0%, 100% { 
+                background-position: 10% 20%, 90% 80%;
+                transform: scale(1);
+            }
+            33% { 
+                background-position: 30% 60%, 70% 40%;
+                transform: scale(1.1);
+            }
+            66% { 
+                background-position: 80% 30%, 20% 70%;
+                transform: scale(0.9);
+            }
+        }
+
+        /* Enhanced Floating Particles */
         .particles {
             position: fixed;
             top: 0;
@@ -82,17 +123,49 @@
 
         .particle {
             position: absolute;
+            border-radius: 50%;
+            opacity: 0.7;
+            animation: float 8s ease-in-out infinite;
+        }
+
+        .particle.type-1 {
             width: 4px;
             height: 4px;
-            background: var(--primary-color);
-            border-radius: 50%;
-            opacity: 0.6;
-            animation: float 6s ease-in-out infinite;
+            background: radial-gradient(circle, var(--primary-color) 0%, transparent 70%);
+            box-shadow: 0 0 10px var(--primary-color);
+        }
+
+        .particle.type-2 {
+            width: 6px;
+            height: 6px;
+            background: radial-gradient(circle, var(--secondary-color) 0%, transparent 70%);
+            box-shadow: 0 0 15px var(--secondary-color);
+        }
+
+        .particle.type-3 {
+            width: 3px;
+            height: 3px;
+            background: radial-gradient(circle, var(--accent-color) 0%, transparent 70%);
+            box-shadow: 0 0 8px var(--accent-color);
         }
 
         @keyframes float {
-            0%, 100% { transform: translateY(0px) rotate(0deg); opacity: 0.6; }
-            50% { transform: translateY(-20px) rotate(180deg); opacity: 1; }
+            0%, 100% { 
+                transform: translateY(0px) translateX(0px) rotate(0deg) scale(1); 
+                opacity: 0.7; 
+            }
+            25% { 
+                transform: translateY(-15px) translateX(10px) rotate(90deg) scale(1.1); 
+                opacity: 1; 
+            }
+            50% { 
+                transform: translateY(-30px) translateX(-5px) rotate(180deg) scale(0.9); 
+                opacity: 0.8; 
+            }
+            75% { 
+                transform: translateY(-20px) translateX(-10px) rotate(270deg) scale(1.05); 
+                opacity: 0.9; 
+            }
         }
 
         /* Header */
@@ -171,14 +244,48 @@
             font-family: 'Orbitron', monospace;
             font-size: clamp(3rem, 8vw, 6rem);
             font-weight: 900;
-            background: linear-gradient(45deg, var(--primary-color), var(--secondary-color), var(--accent-color));
-            background-size: 200% 200%;
+            background: linear-gradient(
+                45deg, 
+                var(--primary-color) 0%, 
+                #00ffff 25%, 
+                var(--secondary-color) 50%, 
+                #ff00ff 75%, 
+                var(--accent-color) 100%
+            );
+            background-size: 300% 300%;
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
             background-clip: text;
-            animation: textGlow 3s ease-in-out infinite, gradientShift 4s ease infinite;
+            animation: 
+                textGlow 3s ease-in-out infinite, 
+                rainbowShift 6s ease infinite,
+                textFloat 4s ease-in-out infinite;
             margin-bottom: 20px;
-            text-shadow: 0 0 50px rgba(0, 255, 136, 0.3);
+            text-shadow: 
+                0 0 30px rgba(0, 255, 136, 0.4),
+                0 0 60px rgba(0, 102, 255, 0.3),
+                0 0 90px rgba(255, 107, 53, 0.2);
+            position: relative;
+        }
+
+        .hero h1::before {
+            content: attr(data-text);
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(
+                45deg, 
+                rgba(0, 255, 136, 0.3) 0%, 
+                rgba(0, 102, 255, 0.3) 50%, 
+                rgba(255, 107, 53, 0.3) 100%
+            );
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            z-index: -1;
+            animation: glowPulse 2s ease-in-out infinite alternate;
         }
 
         .hero p {
@@ -189,8 +296,25 @@
         }
 
         @keyframes textGlow {
-            0%, 100% { filter: brightness(1); }
-            50% { filter: brightness(1.2); }
+            0%, 100% { filter: brightness(1) contrast(1); }
+            50% { filter: brightness(1.3) contrast(1.1); }
+        }
+
+        @keyframes rainbowShift {
+            0%, 100% { background-position: 0% 50%; }
+            25% { background-position: 100% 25%; }
+            50% { background-position: 200% 50%; }
+            75% { background-position: 300% 75%; }
+        }
+
+        @keyframes textFloat {
+            0%, 100% { transform: translateY(0px) scale(1); }
+            50% { transform: translateY(-5px) scale(1.02); }
+        }
+
+        @keyframes glowPulse {
+            0% { opacity: 0.3; transform: scale(1.05); }
+            100% { opacity: 0.7; transform: scale(1.1); }
         }
 
         @keyframes fadeInUp {
@@ -204,44 +328,89 @@
             }
         }
 
-        /* Server Status Card */
+        @keyframes cardFloat {
+            0%, 100% { transform: translateY(0px) rotateX(0deg); }
+            50% { transform: translateY(-3px) rotateX(1deg); }
+        }
+
+        /* Enhanced Server Status Card */
         .server-status {
-            background: var(--glass-bg);
-            backdrop-filter: blur(20px);
-            border: 1px solid rgba(0, 255, 136, 0.2);
-            border-radius: 20px;
-            padding: 40px;
+            background: 
+                linear-gradient(135deg, rgba(0, 255, 136, 0.08) 0%, rgba(0, 102, 255, 0.05) 100%),
+                var(--glass-bg);
+            backdrop-filter: blur(25px);
+            border: 2px solid transparent;
+            background-clip: padding-box;
+            border-radius: 25px;
+            padding: 45px;
             margin-bottom: 40px;
             min-width: 400px;
-            max-width: 600px;
+            max-width: 650px;
             width: 100%;
             position: relative;
             overflow: hidden;
-            transition: all 0.3s ease;
-            animation: fadeInUp 1s ease-out 0.6s both;
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            animation: 
+                fadeInUp 1s ease-out 0.6s both,
+                cardFloat 6s ease-in-out infinite;
+            box-shadow: 
+                0 20px 40px rgba(0, 0, 0, 0.3),
+                0 0 0 1px rgba(0, 255, 136, 0.1),
+                inset 0 1px 0 rgba(255, 255, 255, 0.1);
         }
 
         .server-status::before {
             content: '';
             position: absolute;
-            top: -2px;
-            left: -2px;
-            right: -2px;
-            bottom: -2px;
-            background: linear-gradient(45deg, var(--primary-color), var(--secondary-color), var(--accent-color));
-            border-radius: 20px;
+            top: -3px;
+            left: -3px;
+            right: -3px;
+            bottom: -3px;
+            background: linear-gradient(
+                45deg, 
+                var(--primary-color) 0%, 
+                #00ffff 25%, 
+                var(--secondary-color) 50%, 
+                #ff00ff 75%, 
+                var(--accent-color) 100%
+            );
+            background-size: 400% 400%;
+            border-radius: 28px;
             z-index: -1;
             opacity: 0;
-            transition: opacity 0.3s ease;
+            transition: all 0.4s ease;
+            animation: rainbowShift 8s ease infinite;
+        }
+
+        .server-status::after {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 0;
+            height: 0;
+            background: radial-gradient(circle, rgba(0, 255, 136, 0.3) 0%, transparent 70%);
+            border-radius: 50%;
+            transform: translate(-50%, -50%);
+            transition: all 0.6s ease;
+            z-index: -1;
         }
 
         .server-status:hover::before {
-            opacity: 0.3;
+            opacity: 0.6;
+        }
+
+        .server-status:hover::after {
+            width: 200px;
+            height: 200px;
         }
 
         .server-status:hover {
-            transform: translateY(-5px);
-            box-shadow: var(--shadow-glow);
+            transform: translateY(-8px) scale(1.02);
+            box-shadow: 
+                0 30px 60px rgba(0, 0, 0, 0.4),
+                0 0 50px rgba(0, 255, 136, 0.3),
+                0 0 100px rgba(0, 102, 255, 0.2);
         }
 
         .server-info {
@@ -495,7 +664,7 @@
     <div class="container">
         <!-- Hero Section -->
         <div class="hero">
-            <h1>Welcome to SmileCraft</h1>
+            <h1 data-text="Welcome to SmileCraft">Welcome to SmileCraft</h1>
             <p>Experience the ultimate Minecraft adventure with cutting-edge gameplay</p>
         </div>
 
@@ -565,26 +734,29 @@
                 this.setupMicroInteractions();
             }
 
-            // Create floating particles
+            // Create enhanced floating particles
             createParticles() {
                 const particlesContainer = document.getElementById('particles');
-                const particleCount = 50;
+                const particleCount = 80;
 
                 for (let i = 0; i < particleCount; i++) {
                     const particle = document.createElement('div');
-                    particle.className = 'particle';
+                    
+                    // Random particle type
+                    const types = ['type-1', 'type-2', 'type-3'];
+                    const randomType = types[Math.floor(Math.random() * types.length)];
+                    particle.className = `particle ${randomType}`;
                     
                     // Random positioning
                     particle.style.left = Math.random() * 100 + '%';
                     particle.style.top = Math.random() * 100 + '%';
                     
-                    // Random animation delay
-                    particle.style.animationDelay = Math.random() * 6 + 's';
+                    // Random animation delay and duration
+                    particle.style.animationDelay = Math.random() * 8 + 's';
+                    particle.style.animationDuration = (Math.random() * 4 + 6) + 's';
                     
-                    // Random size variation
-                    const size = Math.random() * 3 + 2;
-                    particle.style.width = size + 'px';
-                    particle.style.height = size + 'px';
+                    // Random initial transform
+                    particle.style.transform = `rotate(${Math.random() * 360}deg)`;
                     
                     particlesContainer.appendChild(particle);
                     this.particles.push(particle);
@@ -872,4 +1044,3 @@
     </script>
 </body>
 </html>
-
