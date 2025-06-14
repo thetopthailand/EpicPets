@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Minecraft Webshop - ร้านค้าไอเทม</title>
+    <link rel="stylesheet" href="style.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+</head>
+<body>
+    <div class="container">
+        <!-- Header -->
+        <header class="header">
+            <div class="logo">
+                <i class="fas fa-cube"></i>
+                <h1>Minecraft Webshop</h1>
+            </div>
+            <div class="user-info" id="userInfo" style="display: none;">
+                <span id="userDisplay"></span>
+                <span class="points">พ้อย: <span id="userPoints">0</span></span>
+                <button onclick="logout()" class="logout-btn">ออกจากระบบ</button>
+            </div>
+        </header>
+
+        <!-- Login Form -->
+        <div class="login-section" id="loginSection">
+            <div class="login-form">
+                <h2><i class="fas fa-user"></i> เข้าสู่ระบบ</h2>
+                <form id="loginForm">
+                    <div class="input-group">
+                        <label for="username">ชื่อผู้เล่น Minecraft:</label>
+                        <input type="text" id="username" name="username" placeholder="ใส่ชื่อผู้เล่นของคุณ" required>
+                    </div>
+                    <button type="submit" class="login-btn">
+                        <i class="fas fa-sign-in-alt"></i> เข้าสู่ระบบ
+                    </button>
+                </form>
+            </div>
+        </div>
+
+        <!-- Shop Section -->
+        <div class="shop-section" id="shopSection" style="display: none;">
+            <!-- Points Display -->
+            <div class="points-display">
+                <h3><i class="fas fa-coins"></i> พ้อยของคุณ: <span id="pointsDisplay">0</span></h3>
+                <button onclick="addPoints()" class="add-points-btn">
+                    <i class="fas fa-plus"></i> เติมพ้อย
+                </button>
+            </div>
+
+            <!-- Shop Items -->
+            <div class="shop-items">
+                <h2><i class="fas fa-shopping-cart"></i> รายการสินค้า</h2>
+                <div class="items-grid" id="itemsGrid">
+                    <!-- Items will be loaded here -->
+                </div>
+            </div>
+
+            <!-- Admin Panel -->
+            <div class="admin-panel">
+                <h3><i class="fas fa-cog"></i> เพิ่มสินค้าใหม่</h3>
+                <form id="addItemForm">
+                    <div class="form-row">
+                        <input type="text" id="itemName" placeholder="ชื่อสินค้า" required>
+                        <input type="number" id="itemPrice" placeholder="ราคา (พ้อย)" required>
+                        <input type="text" id="itemCommand" placeholder="คำสั่ง RCON" required>
+                    </div>
+                    <button type="submit" class="add-item-btn">
+                        <i class="fas fa-plus"></i> เพิ่มสินค้า
+                    </button>
+                </form>
+            </div>
+        </div>
+
+        <!-- Purchase Modal -->
+        <div class="modal" id="purchaseModal">
+            <div class="modal-content">
+                <span class="close" onclick="closePurchaseModal()">&times;</span>
+                <h3>ยืนยันการซื้อ</h3>
+                <div id="purchaseDetails"></div>
+                <div class="modal-buttons">
+                    <button onclick="confirmPurchase()" class="confirm-btn">ยืนยัน</button>
+                    <button onclick="closePurchaseModal()" class="cancel-btn">ยกเลิก</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Add Points Modal -->
+        <div class="modal" id="pointsModal">
+            <div class="modal-content">
+                <span class="close" onclick="closePointsModal()">&times;</span>
+                <h3>เติมพ้อย</h3>
+                <div class="points-options">
+                    <button onclick="addPointsAmount(100)" class="points-btn">100 พ้อย - ฟรี!</button>
+                    <button onclick="addPointsAmount(500)" class="points-btn">500 พ้อย - ฟรี!</button>
+                    <button onclick="addPointsAmount(1000)" class="points-btn">1000 พ้อย - ฟรี!</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
+
