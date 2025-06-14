@@ -1,0 +1,339 @@
+/* Advanced Minecraft-themed CSS */
+
+:root {
+    --minecraft-green: #00AA00;
+    --minecraft-dark: #1a1a1a;
+    --minecraft-gold: #FFAA00;
+    --minecraft-blue: #5555FF;
+    --minecraft-red: #FF5555;
+    --glass-bg: rgba(255, 255, 255, 0.1);
+    --glass-border: rgba(255, 255, 255, 0.2);
+}
+
+/* Custom Scrollbar */
+::-webkit-scrollbar {
+    width: 12px;
+}
+
+::-webkit-scrollbar-track {
+    background: #1a1a1a;
+    border-radius: 6px;
+}
+
+::-webkit-scrollbar-thumb {
+    background: linear-gradient(135deg, var(--minecraft-green), var(--minecraft-gold));
+    border-radius: 6px;
+    border: 2px solid #1a1a1a;
+}
+
+::-webkit-scrollbar-thumb:hover {
+    background: linear-gradient(135deg, var(--minecraft-gold), var(--minecraft-green));
+}
+
+/* Advanced Animations */
+@keyframes matrix-rain {
+    0% {
+        transform: translateY(-100vh);
+        opacity: 0;
+    }
+    10% {
+        opacity: 1;
+    }
+    90% {
+        opacity: 1;
+    }
+    100% {
+        transform: translateY(100vh);
+        opacity: 0;
+    }
+}
+
+@keyframes neon-glow {
+    0%, 100% {
+        text-shadow: 
+            0 0 5px var(--minecraft-green),
+            0 0 10px var(--minecraft-green),
+            0 0 15px var(--minecraft-green),
+            0 0 20px var(--minecraft-green);
+    }
+    50% {
+        text-shadow: 
+            0 0 10px var(--minecraft-green),
+            0 0 20px var(--minecraft-green),
+            0 0 30px var(--minecraft-green),
+            0 0 40px var(--minecraft-green);
+    }
+}
+
+@keyframes hologram {
+    0%, 100% {
+        opacity: 1;
+        transform: translateY(0) scale(1);
+    }
+    25% {
+        opacity: 0.8;
+        transform: translateY(-2px) scale(1.01);
+    }
+    50% {
+        opacity: 0.9;
+        transform: translateY(-1px) scale(0.99);
+    }
+    75% {
+        opacity: 0.85;
+        transform: translateY(-3px) scale(1.02);
+    }
+}
+
+@keyframes pixel-dance {
+    0%, 100% { transform: translateX(0) translateY(0); }
+    25% { transform: translateX(2px) translateY(-2px); }
+    50% { transform: translateX(-1px) translateY(2px); }
+    75% { transform: translateX(-2px) translateY(-1px); }
+}
+
+/* Advanced Glass Morphism */
+.glass-morphism {
+    background: linear-gradient(135deg, 
+        rgba(255, 255, 255, 0.1), 
+        rgba(255, 255, 255, 0.05)
+    );
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+    border: 1px solid rgba(255, 255, 255, 0.18);
+    box-shadow: 
+        0 8px 32px 0 rgba(31, 38, 135, 0.37),
+        inset 0 1px 0 rgba(255, 255, 255, 0.1);
+}
+
+/* Minecraft Block Effect */
+.minecraft-block {
+    position: relative;
+    background: linear-gradient(135deg, #4a5568, #2d3748);
+    border: 2px solid #718096;
+    box-shadow: 
+        inset 2px 2px 4px rgba(255, 255, 255, 0.1),
+        inset -2px -2px 4px rgba(0, 0, 0, 0.3),
+        0 4px 8px rgba(0, 0, 0, 0.3);
+}
+
+.minecraft-block::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: repeating-linear-gradient(
+        45deg,
+        transparent,
+        transparent 2px,
+        rgba(255, 255, 255, 0.03) 2px,
+        rgba(255, 255, 255, 0.03) 4px
+    );
+    pointer-events: none;
+}
+
+/* Advanced Button Styles */
+.btn-epic {
+    position: relative;
+    background: linear-gradient(145deg, #667eea 0%, #764ba2 100%);
+    border: none;
+    color: white;
+    font-weight: bold;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    overflow: hidden;
+    transition: all 0.3s ease;
+    box-shadow: 
+        0 4px 15px 0 rgba(102, 126, 234, 0.4),
+        0 1px 3px rgba(0, 0, 0, 0.12),
+        0 1px 2px rgba(0, 0, 0, 0.24);
+}
+
+.btn-epic::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(
+        90deg,
+        transparent,
+        rgba(255, 255, 255, 0.3),
+        transparent
+    );
+    transition: left 0.5s;
+}
+
+.btn-epic:hover::before {
+    left: 100%;
+}
+
+.btn-epic:hover {
+    transform: translateY(-3px);
+    box-shadow: 
+        0 8px 25px 0 rgba(102, 126, 234, 0.6),
+        0 4px 6px rgba(0, 0, 0, 0.12),
+        0 2px 4px rgba(0, 0, 0, 0.24);
+}
+
+.btn-epic:active {
+    transform: translateY(-1px);
+}
+
+/* Server Status Indicators */
+.status-online {
+    background: linear-gradient(135deg, #48bb78, #38a169);
+    box-shadow: 0 0 20px rgba(72, 187, 120, 0.5);
+    animation: pulse 2s infinite;
+}
+
+.status-offline {
+    background: linear-gradient(135deg, #f56565, #e53e3e);
+    box-shadow: 0 0 20px rgba(245, 101, 101, 0.5);
+}
+
+.status-loading {
+    background: linear-gradient(135deg, #ed8936, #dd6b20);
+    box-shadow: 0 0 20px rgba(237, 137, 54, 0.5);
+    animation: pulse 1s infinite;
+}
+
+/* Advanced Text Effects */
+.text-neon {
+    animation: neon-glow 2s ease-in-out infinite alternate;
+}
+
+.text-hologram {
+    animation: hologram 4s ease-in-out infinite;
+}
+
+.text-pixel {
+    font-family: 'Courier New', monospace;
+    animation: pixel-dance 3s ease-in-out infinite;
+}
+
+/* Particle System Enhancement */
+.particle-system {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    pointer-events: none;
+    z-index: 1;
+}
+
+.particle-enhanced {
+    position: absolute;
+    border-radius: 50%;
+    animation: matrix-rain linear infinite;
+}
+
+.particle-green {
+    background: radial-gradient(circle, var(--minecraft-green), transparent);
+    box-shadow: 0 0 10px var(--minecraft-green);
+}
+
+.particle-gold {
+    background: radial-gradient(circle, var(--minecraft-gold), transparent);
+    box-shadow: 0 0 10px var(--minecraft-gold);
+}
+
+.particle-blue {
+    background: radial-gradient(circle, var(--minecraft-blue), transparent);
+    box-shadow: 0 0 10px var(--minecraft-blue);
+}
+
+/* Responsive Design Enhancements */
+@media (max-width: 768px) {
+    .glass-morphism {
+        backdrop-filter: blur(10px);
+        -webkit-backdrop-filter: blur(10px);
+    }
+    
+    .minecraft-block {
+        box-shadow: 
+            inset 1px 1px 2px rgba(255, 255, 255, 0.1),
+            inset -1px -1px 2px rgba(0, 0, 0, 0.3),
+            0 2px 4px rgba(0, 0, 0, 0.3);
+    }
+    
+    .btn-epic {
+        box-shadow: 
+            0 2px 8px 0 rgba(102, 126, 234, 0.4),
+            0 1px 2px rgba(0, 0, 0, 0.12);
+    }
+}
+
+/* Loading Animation */
+.loading-spinner {
+    width: 40px;
+    height: 40px;
+    border: 4px solid rgba(0, 170, 0, 0.3);
+    border-top: 4px solid var(--minecraft-green);
+    border-radius: 50%;
+    animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+}
+
+/* Advanced Hover Effects */
+.hover-lift {
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.hover-lift:hover {
+    transform: translateY(-8px) scale(1.02);
+    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
+}
+
+/* Minecraft-style Typography */
+.minecraft-title {
+    font-family: 'Courier New', monospace;
+    font-weight: bold;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    background: linear-gradient(45deg, var(--minecraft-green), var(--minecraft-gold));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    position: relative;
+}
+
+.minecraft-title::after {
+    content: attr(data-text);
+    position: absolute;
+    top: 2px;
+    left: 2px;
+    color: rgba(0, 0, 0, 0.3);
+    z-index: -1;
+    -webkit-text-fill-color: rgba(0, 0, 0, 0.3);
+}
+
+/* Performance Optimizations */
+* {
+    box-sizing: border-box;
+}
+
+.gpu-accelerated {
+    transform: translateZ(0);
+    will-change: transform;
+}
+
+.smooth-scroll {
+    scroll-behavior: smooth;
+}
+
+/* Dark Mode Enhancements */
+@media (prefers-color-scheme: dark) {
+    :root {
+        --glass-bg: rgba(255, 255, 255, 0.05);
+        --glass-border: rgba(255, 255, 255, 0.1);
+    }
+}
+
