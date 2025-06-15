@@ -1,0 +1,59 @@
+# Security Headers
+Header always set X-Content-Type-Options nosniff
+Header always set X-Frame-Options DENY
+Header always set X-XSS-Protection "1; mode=block"
+Header always set Referrer-Policy "strict-origin-when-cross-origin"
+Header always set Content-Security-Policy "default-src 'self'; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline'; img-src 'self' data: https:; connect-src 'self' https://api.mcsrvstat.us;"
+
+# Prevent access to sensitive files
+<Files ~ "^\.">
+    Order allow,deny
+    Deny from all
+</Files>
+
+<Files ~ "\.php$">
+    <RequireAll>
+        Require all granted
+    </RequireAll>
+</Files>
+
+# Protect data directory
+<Directory "data">
+    Order deny,allow
+    Deny from all
+</Directory>
+
+# Protect config directory
+<Directory "config">
+    Order deny,allow
+    Deny from all
+</Directory>
+
+# Protect logs directory
+<Directory "logs">
+    Order deny,allow
+    Deny from all
+</Directory>
+
+# Prevent execution of PHP files in uploads
+<Directory "uploads">
+    php_flag engine off
+</Directory>
+
+# Hide server information
+ServerTokens Prod
+ServerSignature Off
+
+# Prevent hotlinking
+RewriteEngine On
+RewriteCond %{HTTP_REFERER} !^$
+RewriteCond %{HTTP_REFERER} !^https?://(www\.)?yourdomain\.com [NC]
+RewriteRule \.(jpg|jpeg|png|gif|css|js)$ - [F]
+
+# Rate limiting (basic)
+RewriteEngine On
+RewriteMap hosts-deny txt:/tmp/hosts.deny
+RewriteCond ${hosts-deny:%{REMOTE_ADDR}|NOT-FOUND} !=NOT-FOUND [OR]
+RewriteCond ${hosts-deny:%{REMOTE_HOST}|NOT-FOUND} !=NOT-FOUND
+RewriteRule ^.* - [F]
+
