@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>🎮 Minecraft Server Status - Hypixel</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🎮</text></svg>">
+</head>
+<body>
+    <div class="container">
+        <header class="header">
+            <div class="logo">
+                <span class="logo-icon">⛏️</span>
+                <h1>Minecraft Server Status</h1>
+            </div>
+            <div class="last-update">
+                <span id="lastUpdate">กำลังโหลด...</span>
+            </div>
+        </header>
+
+        <main class="main-content">
+            <div class="server-card" id="serverCard">
+                <div class="server-header">
+                    <div class="server-icon">
+                        <img id="serverIcon" src="" alt="Server Icon" style="display: none;">
+                        <div class="default-icon">🏰</div>
+                    </div>
+                    <div class="server-info">
+                        <h2 id="serverName">Hypixel Network</h2>
+                        <p id="serverAddress">hypixel.net</p>
+                    </div>
+                    <div class="server-status">
+                        <div class="status-indicator" id="statusIndicator">
+                            <div class="status-dot"></div>
+                            <span id="statusText">กำลังตรวจสอบ...</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="server-details" id="serverDetails">
+                    <div class="loading-spinner">
+                        <div class="spinner"></div>
+                        <p>กำลังโหลดข้อมูลเซิร์ฟเวอร์...</p>
+                    </div>
+                </div>
+
+                <div class="server-motd" id="serverMotd" style="display: none;">
+                    <h3>📢 ข้อความจากเซิร์ฟเวอร์</h3>
+                    <div class="motd-content" id="motdContent"></div>
+                </div>
+
+                <div class="server-stats" id="serverStats" style="display: none;">
+                    <div class="stat-item">
+                        <div class="stat-icon">👥</div>
+                        <div class="stat-info">
+                            <span class="stat-label">ผู้เล่นออนไลน์</span>
+                            <span class="stat-value" id="playersOnline">-</span>
+                        </div>
+                    </div>
+                    <div class="stat-item">
+                        <div class="stat-icon">🎯</div>
+                        <div class="stat-info">
+                            <span class="stat-label">ผู้เล่นสูงสุด</span>
+                            <span class="stat-value" id="playersMax">-</span>
+                        </div>
+                    </div>
+                    <div class="stat-item">
+                        <div class="stat-icon">🔧</div>
+                        <div class="stat-info">
+                            <span class="stat-label">เวอร์ชัน</span>
+                            <span class="stat-value" id="serverVersion">-</span>
+                        </div>
+                    </div>
+                    <div class="stat-item">
+                        <div class="stat-icon">🌐</div>
+                        <div class="stat-info">
+                            <span class="stat-label">โปรโตคอล</span>
+                            <span class="stat-value" id="serverProtocol">-</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="controls">
+                <button class="refresh-btn" id="refreshBtn">
+                    <span class="btn-icon">🔄</span>
+                    รีเฟรชข้อมูล
+                </button>
+                <div class="auto-refresh">
+                    <label class="switch">
+                        <input type="checkbox" id="autoRefresh" checked>
+                        <span class="slider"></span>
+                    </label>
+                    <span>รีเฟรชอัตโนมัติ (30 วินาที)</span>
+                </div>
+            </div>
+        </main>
+
+        <footer class="footer">
+            <p>
+                🔗 ข้อมูลจาก <a href="https://mcsrvstat.us" target="_blank">mcsrvstat.us</a> 
+                | 💻 สร้างด้วย ❤️ โดย Codegen
+            </p>
+        </footer>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
+

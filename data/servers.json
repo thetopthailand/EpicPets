@@ -1,0 +1,47 @@
+{
+  "hypixel.net": {
+    "data": {
+      "online": true,
+      "ip": "hypixel.net",
+      "port": 25565,
+      "debug": {
+        "ping": true,
+        "query": false,
+        "srv": true,
+        "querymismatch": false,
+        "ipinsrv": false,
+        "cnameinsrv": false,
+        "animatedmotd": false,
+        "cachetime": 60,
+        "cacheexpire": 1640995200,
+        "apiversion": 3
+      },
+      "motd": {
+        "raw": [
+          "§aHypixel Network §c[1.8-1.19]",
+          "§b§lNEW §6§lBED WARS PRACTICE MODE"
+        ],
+        "clean": [
+          "Hypixel Network [1.8-1.19]",
+          "NEW BED WARS PRACTICE MODE"
+        ],
+        "html": [
+          "<span style=\"color: #55ff55;\">Hypixel Network </span><span style=\"color: #ff5555;\">[1.8-1.19]</span>",
+          "<span style=\"color: #5555ff; font-weight: bold;\">NEW </span><span style=\"color: #ffff55; font-weight: bold;\">BED WARS PRACTICE MODE</span>"
+        ]
+      },
+      "players": {
+        "online": 45000,
+        "max": 200000
+      },
+      "version": {
+        "name": "Requires MC 1.8 / 1.19",
+        "protocol": 47
+      },
+      "hostname": "mc.hypixel.net",
+      "icon": "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAEAAAABACAYAAACqaXHeAAAABHNCSVQICAgIfAhkiAAAAAlwSFlzAAAOxAAADsQBlSsOGwAAABl0RVh0U29mdHdhcmUAd3d3Lmlua3NjYXBlLm9yZ5vuPBoAAA=="
+    },
+    "timestamp": 1640995140000
+  }
+}
+
