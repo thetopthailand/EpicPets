@@ -7,26 +7,48 @@
  * @version 1.0
  */
 
+// Enable error reporting for debugging
+error_reporting(E_ALL);
+ini_set('display_errors', 1);
+
 define('WEBSHOP_INIT', true);
+
+// Check if required files exist
+if (!file_exists(__DIR__ . '/includes/security.php')) {
+    die('Error: includes/security.php not found. Please upload all files.');
+}
+
+if (!file_exists(__DIR__ . '/includes/data_manager.php')) {
+    die('Error: includes/data_manager.php not found. Please upload all files.');
+}
+
+if (!file_exists(__DIR__ . '/includes/rcon_handler.php')) {
+    die('Error: includes/rcon_handler.php not found. Please upload all files.');
+}
 
 require_once __DIR__ . '/includes/security.php';
 require_once __DIR__ . '/includes/data_manager.php';
 require_once __DIR__ . '/includes/rcon_handler.php';
 
-// Initialize components
-$security = Security::getInstance();
-$data_manager = DataManager::getInstance();
+try {
+    // Initialize components
+    $security = Security::getInstance();
+    $data_manager = DataManager::getInstance();
 
-// Check if already installed
-$config = $data_manager->getConfig();
-if ($config['installed']) {
-    header('Location: index.php');
-    exit;
+    // Check if already installed
+    $config = $data_manager->getConfig();
+    if (isset($config['installed']) && $config['installed']) {
+        header('Location: index.php');
+        exit;
+    }
+} catch (Exception $e) {
+    die('Initialization error: ' . htmlspecialchars($e->getMessage()));
 }
 
 // Handle installation steps
 $step = (int) ($_GET['step'] ?? 1);
 $max_steps = 5;
+$error = '';
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     try {
@@ -207,7 +229,12 @@ function handleStep5() {
     ]);
     
     // Create initial backup
-    $data_manager->createBackup();
+    try {
+        $data_manager->createBackup();
+    } catch (Exception $e) {
+        // Backup failed but continue
+        error_log("Backup creation failed: " . $e->getMessage());
+    }
     
     // Redirect to main page
     header('Location: index.php?installed=1');
@@ -423,7 +450,7 @@ function handleStep5() {
         </div>
         
         <div class="install-body">
-            <?php if (isset($error)): ?>
+            <?php if (!empty($error)): ?>
                 <div class="alert alert-error">
                     <strong>เกิดข้อผิดพลาด:</strong> <?= htmlspecialchars($error) ?>
                 </div>

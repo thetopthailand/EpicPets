@@ -7,26 +7,48 @@
  * @version 1.0
  */
 
+// Enable error reporting for debugging
+error_reporting(E_ALL);
+ini_set('display_errors', 1);
+
 define('WEBSHOP_INIT', true);
+
+// Check if files exist before including
+if (!file_exists(__DIR__ . '/includes/security.php')) {
+    die('Security file not found. Please ensure all files are uploaded correctly.');
+}
+
+if (!file_exists(__DIR__ . '/includes/data_manager.php')) {
+    die('Data manager file not found. Please ensure all files are uploaded correctly.');
+}
 
 require_once __DIR__ . '/includes/security.php';
 require_once __DIR__ . '/includes/data_manager.php';
 
-// Initialize components
-$security = Security::getInstance();
-$data_manager = DataManager::getInstance();
+try {
+    // Initialize components
+    $security = Security::getInstance();
+    $data_manager = DataManager::getInstance();
 
-// Check if system is installed
-$config = $data_manager->getConfig();
-if (!$config['installed']) {
-    header('Location: install.php');
-    exit;
-}
+    // Check if system is installed
+    $config = $data_manager->getConfig();
+    if (!isset($config['installed']) || !$config['installed']) {
+        header('Location: install.php');
+        exit;
+    }
 
-// Check maintenance mode
-if ($config['maintenance_mode']) {
-    include __DIR__ . '/maintenance.html';
-    exit;
+    // Check maintenance mode
+    if (isset($config['maintenance_mode']) && $config['maintenance_mode']) {
+        if (file_exists(__DIR__ . '/maintenance.html')) {
+            include __DIR__ . '/maintenance.html';
+        } else {
+            echo '<h1>ระบบปิดปรุงชั่วคราว</h1><p>กรุณาลองใหม่อีกครั้งในภายหลัง</p>';
+        }
+        exit;
+    }
+
+} catch (Exception $e) {
+    die('System initialization error: ' . htmlspecialchars($e->getMessage()));
 }
 
 // Handle AJAX requests
@@ -54,11 +76,17 @@ if (isset($_GET['ajax'])) {
     exit;
 }
 
-// Get products
-$products = $data_manager->getProducts();
-$enabled_products = array_filter($products, function($product) {
-    return $product['enabled'];
-});
+// Get products safely
+try {
+    $products = $data_manager->getProducts();
+    $enabled_products = array_filter($products, function($product) {
+        return isset($product['enabled']) && $product['enabled'];
+    });
+} catch (Exception $e) {
+    $products = [];
+    $enabled_products = [];
+    error_log("Error loading products: " . $e->getMessage());
+}
 
 /**
  * Handle server status AJAX request
@@ -66,8 +94,8 @@ $enabled_products = array_filter($products, function($product) {
 function handleServerStatus() {
     global $config;
     
-    $server_ip = $config['server_ip'] ?? 'localhost';
-    $server_port = $config['server_port'] ?? 25565;
+    $server_ip = isset($config['server_ip']) ? $config['server_ip'] : 'localhost';
+    $server_port = isset($config['server_port']) ? $config['server_port'] : 25565;
     
     // Get status from mcsrvstat.us API
     $api_url = "https://api.mcsrvstat.us/3/{$server_ip}";
@@ -88,14 +116,14 @@ function handleServerStatus() {
         $api_data = json_decode($api_response, true);
         
         echo json_encode([
-            'online' => $api_data['online'] ?? false,
+            'online' => isset($api_data['online']) ? $api_data['online'] : false,
             'players' => [
-                'online' => $api_data['players']['online'] ?? 0,
-                'max' => $api_data['players']['max'] ?? 0
+                'online' => isset($api_data['players']['online']) ? $api_data['players']['online'] : 0,
+                'max' => isset($api_data['players']['max']) ? $api_data['players']['max'] : 0
             ],
-            'version' => $api_data['version'] ?? 'Unknown',
-            'motd' => $api_data['motd']['clean'] ?? [],
-            'icon' => $api_data['icon'] ?? null
+            'version' => isset($api_data['version']) ? $api_data['version'] : 'Unknown',
+            'motd' => isset($api_data['motd']['clean']) ? $api_data['motd']['clean'] : [],
+            'icon' => isset($api_data['icon']) ? $api_data['icon'] : null
         ]);
     } else {
         echo json_encode([
@@ -126,9 +154,9 @@ function handleUserInfo() {
     
     echo json_encode([
         'username' => $user['username'],
-        'points' => $user['points'],
-        'total_spent' => $user['total_spent'],
-        'total_purchases' => $user['total_purchases']
+        'points' => isset($user['points']) ? $user['points'] : 0,
+        'total_spent' => isset($user['total_spent']) ? $user['total_spent'] : 0,
+        'total_purchases' => isset($user['total_purchases']) ? $user['total_purchases'] : 0
     ]);
 }
 
@@ -180,8 +208,8 @@ function handlePurchase() {
     $response = file_get_contents('rcon.php?action=purchase', false, $context);
     $result = json_decode($response, true);
     
-    if (!$result || !$result['success']) {
-        throw new Exception($result['error'] ?? 'Purchase failed');
+    if (!$result || !isset($result['success']) || !$result['success']) {
+        throw new Exception(isset($result['error']) ? $result['error'] : 'Purchase failed');
     }
     
     echo json_encode($result);
@@ -193,7 +221,7 @@ function handlePurchase() {
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title><?= htmlspecialchars($config['site_name']) ?></title>
+    <title><?= htmlspecialchars($config['site_name'] ?? 'Minecraft Webshop') ?></title>
     <meta name="description" content="ร้านค้าออนไลน์สำหรับเซิร์ฟเวอร์ Minecraft">
     <link rel="icon" type="image/x-icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>⛏️</text></svg>">
     
@@ -541,7 +569,7 @@ function handlePurchase() {
     <div class="container">
         <!-- Header -->
         <div class="header">
-            <h1>⛏️ <?= htmlspecialchars($config['site_name']) ?></h1>
+            <h1>⛏️ <?= htmlspecialchars($config['site_name'] ?? 'Minecraft Webshop') ?></h1>
             <p class="subtitle">ร้านค้าออนไลน์สำหรับเซิร์ฟเวอร์ Minecraft</p>
         </div>
         
@@ -549,8 +577,8 @@ function handlePurchase() {
         <div class="server-status">
             <div class="server-info">
                 <div class="server-details">
-                    <h3><?= htmlspecialchars($config['server_name']) ?></h3>
-                    <div class="server-ip"><?= htmlspecialchars($config['server_ip']) ?><?= $config['server_port'] != 25565 ? ':' . $config['server_port'] : '' ?></div>
+                    <h3><?= htmlspecialchars($config['server_name'] ?? 'My Server') ?></h3>
+                    <div class="server-ip"><?= htmlspecialchars($config['server_ip'] ?? 'localhost') ?><?= (isset($config['server_port']) && $config['server_port'] != 25565) ? ':' . $config['server_port'] : '' ?></div>
                 </div>
                 <div class="status-indicator">
                     <div class="status-dot status-offline" id="status-dot"></div>
@@ -606,10 +634,10 @@ function handlePurchase() {
                 <?php else: ?>
                     <?php foreach ($enabled_products as $product): ?>
                         <div class="product-card">
-                            <div class="product-name"><?= htmlspecialchars($product['name']) ?></div>
-                            <div class="product-description"><?= htmlspecialchars($product['description']) ?></div>
-                            <div class="product-price"><?= number_format($product['price']) ?> พ้อยท์</div>
-                            <button class="product-buy" onclick="purchaseProduct('<?= htmlspecialchars($product['id']) ?>')" disabled>
+                            <div class="product-name"><?= htmlspecialchars($product['name'] ?? 'Unknown Product') ?></div>
+                            <div class="product-description"><?= htmlspecialchars($product['description'] ?? '') ?></div>
+                            <div class="product-price"><?= number_format($product['price'] ?? 0) ?> พ้อยท์</div>
+                            <button class="product-buy" onclick="purchaseProduct('<?= htmlspecialchars($product['id'] ?? '') ?>')" disabled>
                                 ซื้อสินค้า
                             </button>
                         </div>
@@ -620,7 +648,7 @@ function handlePurchase() {
         
         <!-- Footer -->
         <div class="footer">
-            <p>&copy; 2024 <?= htmlspecialchars($config['site_name']) ?> - Powered by Minecraft Webshop</p>
+            <p>&copy; 2024 <?= htmlspecialchars($config['site_name'] ?? 'Minecraft Webshop') ?> - Powered by Minecraft Webshop</p>
         </div>
     </div>
     
@@ -740,8 +768,10 @@ function handlePurchase() {
                 }
                 
                 // Update user points
-                currentUser.points = data.remaining_points;
-                document.getElementById('user-points').textContent = data.remaining_points.toLocaleString();
+                if (data.remaining_points !== undefined) {
+                    currentUser.points = data.remaining_points;
+                    document.getElementById('user-points').textContent = data.remaining_points.toLocaleString();
+                }
                 
                 // Show success message
                 let message = 'ซื้อสินค้าสำเร็จ!';

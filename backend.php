@@ -54,7 +54,7 @@ if (isset($_GET['action']) && $_GET['action'] === 'logout') {
 
 // Check authentication
 if (!$security->isAuthenticated()) {
-    include 'login_form.php';
+    showLoginForm();
     exit;
 }
 
@@ -93,11 +93,23 @@ if (isset($_GET['ajax'])) {
     exit;
 }
 
-// Get data for display
-$users = $data_manager->readDataFile('users.php');
-$products = $data_manager->getProducts();
-$transactions = $data_manager->getTransactions(null, 50);
-$stats = $data_manager->getStatistics();
+// Get data for display (only if authenticated)
+$users = [];
+$products = [];
+$transactions = [];
+$stats = [];
+
+if ($security->isAuthenticated()) {
+    try {
+        $users = $data_manager->readDataFile('users.php');
+        $products = $data_manager->getProducts();
+        $transactions = $data_manager->getTransactions(null, 50);
+        $stats = $data_manager->getStatistics();
+    } catch (Exception $e) {
+        // Handle data loading errors gracefully
+        error_log("Data loading error: " . $e->getMessage());
+    }
+}
 
 /**
  * Handle add points AJAX request
@@ -277,7 +289,7 @@ function handleSaveConfig() {
             </div>
             <div class="stat-card">
                 <div class="stat-value"><?= number_format($stats['total_transactions']) ?></div>
-                <div class="stat-label">ธุรกรรมทั้งหมด</div>
+                <div class="stat-label">���ุรกรรมทั้งหมด</div>
             </div>
             <div class="stat-card">
                 <div class="stat-value"><?= number_format($stats['total_points_distributed']) ?></div>
@@ -289,14 +301,14 @@ function handleSaveConfig() {
         <div class="tabs">
             <div class="tab active" onclick="showTab('users')">จัดการผู้ใช้</div>
             <div class="tab" onclick="showTab('products')">จัดการสินค้า</div>
-            <div class="tab" onclick="showTab('transactions')">ประวัติธุรกรรม</div>
+            <div class="tab" onclick="showTab('transactions')">ประวั���ิธุรกรรม</div>
             <div class="tab" onclick="showTab('settings')">ตั้งค่าระบบ</div>
         </div>
 
         <!-- Users Tab -->
         <div id="users-tab" class="tab-content active">
             <div class="card">
-                <h3>เพิ่มพ้อยท์ให้ผู้ใช้</h3>
+                <h3>เพิ่มพ้อยท์ใ���้ผู้ใช้</h3>
                 <form id="add-points-form">
                     <div style="display: flex; gap: 15px; align-items: end;">
                         <div class="form-group" style="flex: 1;">
@@ -349,7 +361,7 @@ function handleSaveConfig() {
                         <input type="text" name="product_id" required>
                     </div>
                     <div class="form-group">
-                        <label>ชื่อสินค้า</label>
+                        <label>ชื่อสิน��้า</label>
                         <input type="text" name="name" required>
                     </div>
                     <div class="form-group">
@@ -446,7 +458,7 @@ function handleSaveConfig() {
                         <input type="text" name="server_name" value="<?= htmlspecialchars($config['server_name']) ?>">
                     </div>
                     <div class="form-group">
-                        <label>IP เซิร์ฟเวอร์</label>
+                        <label>IP เซิร์ฟ��วอร์</label>
                         <input type="text" name="server_ip" value="<?= htmlspecialchars($config['server_ip']) ?>">
                     </div>
                     <div class="form-group">
@@ -466,7 +478,7 @@ function handleSaveConfig() {
                         <input type="password" name="rcon_password" placeholder="กรอกรหัสผ่านใหม่หากต้องการเปลี่ยน">
                     </div>
                     <div class="form-group">
-                        <label>พ้อยท์สูงสุดต่อผู้ใช้</label>
+                        <label>พ้อยท์สูงสุด��่อผู้ใช้</label>
                         <input type="number" name="max_points_per_user" value="<?= htmlspecialchars($config['max_points_per_user']) ?>">
                     </div>
                     <div class="form-group">

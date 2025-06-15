@@ -98,7 +98,7 @@ class DataManager {
     /**
      * Read data from encrypted file
      */
-    private function readDataFile($filename) {
+    public function readDataFile($filename) {
         $filepath = $this->data_dir . '/' . $filename;
         
         if (!file_exists($filepath)) {
@@ -540,4 +540,3 @@ class DataManager {
     }
 }
 ?>
-
